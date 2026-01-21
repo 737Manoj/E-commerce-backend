@@ -1,7 +1,9 @@
 package com.fullStack.e_com_proj.controller;
 
+import com.fullStack.e_com_proj.dto.ProductResponseDto;
 import com.fullStack.e_com_proj.model.Product;
 import com.fullStack.e_com_proj.service.ProductService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -14,16 +16,16 @@ import java.util.List;
 
 
 @RestController
+@RequiredArgsConstructor
 @CrossOrigin(origins = "http://localhost:5173")
 @RequestMapping("/api")
 public class ProductController {
 
-    @Autowired
-    private ProductService service;
+    private final ProductService service;
 
 
     @GetMapping("/products")
-    public ResponseEntity<List<Product>> getAllProducts() {
+    public ResponseEntity<List<ProductResponseDto>> getAllProducts() {
 
         return new ResponseEntity<>(service.getAllProducts(), HttpStatus.OK);
     }
