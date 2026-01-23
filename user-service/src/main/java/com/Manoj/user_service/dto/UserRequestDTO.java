@@ -1,29 +1,25 @@
-package com.Manoj.user_service.model;
+package com.Manoj.user_service.dto;
 
-import jakarta.persistence.*;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 import lombok.*;
 
 @Data
-@Entity
 @Builder
-@AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "user_details")
-public class User {
+@AllArgsConstructor
+public class UserRequestDTO {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     @NonNull
     private String username;
     @NonNull
     private String password;
     @NonNull
     private String email;
-    @NonNull
     private String role;
-
-
 
 }

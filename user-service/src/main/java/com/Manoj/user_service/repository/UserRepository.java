@@ -3,9 +3,11 @@ package com.Manoj.user_service.repository;
 import com.Manoj.user_service.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface UserRepository extends JpaRepository<User,Integer> {
+import java.util.Optional;
 
-    User findById(int id);
+public interface UserRepository extends JpaRepository<User, Long> {
+
+    Optional<User> findById(Long id);
     User findByEmail(String email);
     User findByUsername(String username);
 }
