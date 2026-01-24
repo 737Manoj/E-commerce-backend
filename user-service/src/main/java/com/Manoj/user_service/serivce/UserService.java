@@ -15,16 +15,20 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
-@RequiredArgsConstructor
 public class UserService {
 
     private final UserRepository userRepository;
-    private final BCryptPasswordEncoder bCryptPasswordEncoder;
+    private final BCryptPasswordEncoder passwordEncoder;
+
+    public UserService(UserRepository userRepository, BCryptPasswordEncoder passwordEncoder) {
+        this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
+    }
 
     public UserResponseDTO createUser(UserRequestDTO userRequestDTO) {
         User user = User.builder()
                 .username(userRequestDTO.getUsername())
-                .password(Objects.requireNonNull(bCryptPasswordEncoder.encode(userRequestDTO.getPassword())))
+                .password(Objects.requireNonNull(passwordEncoder.encode(userRequestDTO.getPassword())))
                 .email(userRequestDTO.getEmail())
                 .role(userRequestDTO.getRole() != null ? userRequestDTO.getRole() : "USER")
                 .build();
@@ -43,7 +47,7 @@ public class UserService {
                 .orElseThrow(() -> new ResourceNotFoundException("User not found with id: " + id));
         existingUser.setUsername(userRequestDTO.getUsername());
         existingUser.setEmail(userRequestDTO.getEmail());
-        existingUser.setPassword(bCryptPasswordEncoder.encode(userRequestDTO.getPassword()));
+        existingUser.setPassword(passwordEncoder.encode(userRequestDTO.getPassword()));
         existingUser.setRole(userRequestDTO.getRole() != null  ? userRequestDTO.getRole() : "USER");
         User savedUser = userRepository.save(existingUser);
         return toUserResponseDTO(savedUser);
