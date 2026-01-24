@@ -15,15 +15,11 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class UserService {
 
     private final UserRepository userRepository;
     private final BCryptPasswordEncoder passwordEncoder;
-
-    public UserService(UserRepository userRepository, BCryptPasswordEncoder passwordEncoder) {
-        this.userRepository = userRepository;
-        this.passwordEncoder = passwordEncoder;
-    }
 
     public UserResponseDTO createUser(UserRequestDTO userRequestDTO) {
         User user = User.builder()
@@ -40,6 +36,16 @@ public class UserService {
         return userRepository.findById(id)
                 .map(this::toUserResponseDTO)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found with id: " + id));
+    }
+
+    public boolean getUserByEmail(String email){
+        return userRepository.findByEmail(email).isPresent();
+    }
+
+    public UserResponseDTO getUserByUsername(String username){
+        return userRepository.findByUsername(username)
+                .map(this::toUserResponseDTO)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found with username: " + username));
     }
 
     public UserResponseDTO updateUser(Long id, UserRequestDTO userRequestDTO) {
